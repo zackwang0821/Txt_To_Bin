@@ -8,22 +8,26 @@ size_t readTxt(FILE *in, unsigned char *end, FILE *out){
 
 	if (end == NULL){
 		//Read the file and transfer into hex unitl the end.
-		while ((n = fscanf(in, "%hhx", &oneByte))){
+		while ((n = fscanf(in, "%hhx", &oneByte)) == 1){
 			fwrite(&oneByte, sizeof(unsigned char), 1, out);
           	count++;
-		}		
+		}
 	}
+    if (n != EOF) {
+        ;  // handle syntax error
+    }
 
 	return count;
 }
+
 int main(void){
 	char name[50];
 	
 	printf("Enter the file name:");
-	scanf("&s", name);
+	scanf("%s", name);
 	//fopen(const char * filename, const char * mode) to read txt(rt) file.
 	FILE* fileIn = fopen(name, "rt");
-	
+//	FILE* fileIn = fopen("123.txt", "rt");
 	//If file is empty, return fail.
 	if (!fileIn){
 		fclose(fileIn);
