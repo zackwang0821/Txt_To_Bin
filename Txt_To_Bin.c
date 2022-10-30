@@ -1,7 +1,21 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+size_t readTxt(FILE *in, unsigned char *end, FILE *out){
+	int n;
+	size_t count = 0;
+	unsigned char oneByte;
 
+	if (end == NULL){
+		//Read the file and transfer into hex unitl the end.
+		while ((n = fscanf(in, "%hhx", &oneByte))){
+			fwrite(&oneByte, sizeof(unsigned char), 1, out);
+          	count++;
+		}		
+	}
+
+	return count;
+}
 int main(void){
 	char name[50];
 	
@@ -23,6 +37,14 @@ int main(void){
 		return -1;
 	}
 	
-	return 0;
+	//Call readTxt function and transfer into binary.
+	size_t n = readTxt(fileIn, NULL, fileOut);
 	
+	rewind(fileIn);
+	fclose(fileIn);
+	fclose(fileOut);
+	
+	return 0;
 }
+
+
